@@ -1,6 +1,8 @@
-'use strict';
 
+ 'use strict';
 var P2PSpider = require('../lib');
+ var fs = require('fs'),
+ path = require('path');
 
 var p2p = P2PSpider({
     nodesMaxSize: 200,   // be careful
@@ -15,7 +17,16 @@ p2p.ignore(function (infohash, rinfo, callback) {
 });
 
 p2p.on('metadata', function (metadata) {
-    console.log(metadata);
+
+    fs.appendFile('message.txt', JSON.stringify(metadata),function (err) {
+        if(err) {
+            console.error(err);
+        } else {
+            console.log('写入成功');
+        }
+    });
+
+
 });
 
 p2p.listen(6881, '0.0.0.0');
